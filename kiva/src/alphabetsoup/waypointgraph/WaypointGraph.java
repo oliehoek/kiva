@@ -32,7 +32,8 @@ public class WaypointGraph {
 	 * entities set in the Waypoint, such as Buckets, stations, etc.
 	 * @param w Waypoint to add
 	 */
-	public void addWaypoint(Waypoint w) {
+	public void addWaypoint(Waypoint w) 
+	{
 		waypoints.add(w);
 		waypointQuadtree.addCircleObject(w);
 
@@ -45,7 +46,8 @@ public class WaypointGraph {
 	 * such as Buckets, Stations, etc. 
 	 * @param w Waypoint to remove
 	 */
-	public void removeWaypoint(Waypoint w) {
+	public void removeWaypoint(Waypoint w) 
+	{
 		waypoints.remove(w);
 		waypointQuadtree.removeCircleObject(w);
 		

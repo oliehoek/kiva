@@ -34,7 +34,8 @@ public class Map implements Updateable {
 	 * @param max_acceleration maximum acceleration of anything on the map
 	 * @param max_velocity maximum velocity of anything on the map
 	 */
-	public Map(float map_width, float map_height, float map_tolerance, float max_acceleration, float max_velocity) {
+	public Map(float map_width, float map_height, float map_tolerance, float max_acceleration, float max_velocity) 
+	{
 		width = map_width;	height = map_height;	tolerance = map_tolerance;
 		maxAcceleration = max_acceleration;
 		maxVelocity = max_velocity;
@@ -51,9 +52,9 @@ public class Map implements Updateable {
 	 * @param r		Bucketbot object to add
 	 * @return		Returns true if the Bucketbot can be and has been placed, false if it cannot be placed
 	 */
-	public boolean addRobot(Bucketbot r) {	
-		if(!isBucketbotMoveValid(r, r.getX(), r.getY()))
-			return false;
+	public boolean addRobot(Bucketbot r) 
+	{	
+		if(!isBucketbotMoveValid(r, r.getX(), r.getY())) return false;
 		bucketbots.add(r);
 		bucketbotQuadtree.addCircleObject((Circle)r);
 		return true;
@@ -63,9 +64,9 @@ public class Map implements Updateable {
 	 * @param b		Bucket object to add
 	 * @return		Returns true if the Bucket can be and has been placed, false if it cannot be placed
 	 */
-	public boolean addBucket(Bucket b) {
-		if(!isValidBucketStorageLocation(b, b.getX(), b.getY()))
-			return false;
+	public boolean addBucket(Bucket b) 
+	{
+		if(!isValidBucketStorageLocation(b, b.getX(), b.getY())) return false;
 		buckets.add(b);
 		bucketQuadtree.addCircleObject((Circle)b);
 		return true;

@@ -4,7 +4,6 @@
 package alphabetsoup.waypointgraph;
 
 import java.util.*;
-
 import alphabetsoup.framework.*;
 
 /**
@@ -61,22 +60,23 @@ public class GenerateWaypointGraph {
 		
 		//create all the waypoint nodes for the grid
 		Waypoint[][] grid = new Waypoint[height_count][width_count];
-		for(int i = 0; i < height_count; i++) {
-			for(int j = 0; j < width_count; j++) {
+		for(int i = 0; i < height_count; i++) 
+		{
+			for(int j = 0; j < width_count; j++) 
+			{
 				grid[i][j] = new Waypoint(x_start + j*grid_link_width, y_start + i*grid_link_height, false);
 				waypointGraph.addWaypoint(grid[i][j]);
 				
 				//as long as not a first node, connect back to previous spots
-				if(j > 0)
-					grid[i][j].addBidirectionalPath(grid[i][j-1]);
-				if(i > 0)
-					grid[i][j].addBidirectionalPath(grid[i-1][j]);
+				if(j > 0) grid[i][j].addBidirectionalPath(grid[i][j-1]);
+				if(i > 0) grid[i][j].addBidirectionalPath(grid[i-1][j]);
 			}
 		}
 		
 		double max_connection_angle = Math.PI/3;
 		//connect edges of grid to stations
-		for(LetterStation ls : sw.letterStations) {
+		for(LetterStation ls : sw.letterStations) 
+		{
 			//create a, b, c points, where a is above the station, b is at, c is below,
 			// so each station has its own little queue
 			Waypoint wa = new Waypoint(ls.getX(), ls.getY() + 2.5f*ls.getRadius(), false);
@@ -148,11 +148,10 @@ public class GenerateWaypointGraph {
 		}
 
 		//add the remaining empty storage locations to the graph and BucketStorageAgent
-		while(y_index < height_count-2) {
-			
+		while(y_index < height_count-2) 
+		{	
 			//add destinationWaypoint, and connect up to grid
-			Waypoint w = new Waypoint(x_start + (x_index + 0.5f) * grid_link_width,
-					y_start + (y_index + 0.5f) * grid_link_height, true);
+			Waypoint w = new Waypoint(x_start + (x_index + 0.5f) * grid_link_width, y_start + (y_index + 0.5f) * grid_link_height, true);
 			waypointGraph.addWaypoint(w);
 			w.addBidirectionalPath(grid[y_index][x_index]);
 			w.addBidirectionalPath(grid[y_index][x_index+1]);
@@ -204,7 +203,8 @@ public class GenerateWaypointGraph {
 	/**Moves the LetterStations evenly across the left side, WordStations evenly across the right side,
 	 * and randomly distributes buckets and bucketbots. 
 	 */
-	static public HashMap<Waypoint, Bucket> initializeCompactRandomLayout(SimulationWorld sw, WaypointGraph waypointGraph) {
+	static public HashMap<Waypoint, Bucket> initializeCompactRandomLayout(SimulationWorld sw, WaypointGraph waypointGraph) 
+	{
 		
 		HashMap<Waypoint, Bucket> bucket_storage_locations = new HashMap<Waypoint, Bucket>(); 
 		
@@ -214,7 +214,8 @@ public class GenerateWaypointGraph {
 		float bucketbot_radius = sw.bucketbots[0].getRadius();
 		
 		//spread letter stations evenly across on the left side
-		for(int i = 0; i < sw.letterStations.length; i++ ) {
+		for(int i = 0; i < sw.letterStations.length; i++ ) 
+		{
 			Circle c = (Circle) sw.letterStations[i];
 			c.setInitialPosition(Math.max(c.getRadius(), bucketbot_radius), (i + 1) * sw.map.getHeight() / (1 + sw.letterStations.length) );
 			circles.add(c);
@@ -222,7 +223,8 @@ public class GenerateWaypointGraph {
 		}
 		
 		//spread word stations evenly across on the right side
-		for(int i = 0; i < sw.wordStations.length; i++ ) {
+		for(int i = 0; i < sw.wordStations.length; i++ ) 
+		{
 			Circle c = (Circle) sw.wordStations[i];
 			c.setInitialPosition(sw.map.getWidth() - Math.max(c.getRadius(), bucketbot_radius), (i + 1) * sw.map.getHeight() / (1 + sw.wordStations.length) );
 			circles.add(c);
@@ -230,14 +232,18 @@ public class GenerateWaypointGraph {
 		}
 		
 		//find area to put buckets within
+		// IT DOES NOT USE Width and Height OF THE MAP
+		// placeabl_width and placeable_height ARE THE ACTUAL AREA OF BUCKETS
 		float placeable_width = sw.map.getWidth() - sw.wordStations[0].getRadius() - sw.letterStations[0].getRadius() - 8 * sw.bucketbots[0].getRadius();
 		float placeable_height = sw.map.getHeight() - 2 * sw.bucketbots[0].getRadius();
 		
 		float block_size = 2.0f * sw.buckets[0].getRadius() + 2 * sw.map.getTolerance();
+		System.out.println("Block size is " + block_size);
 		
 		int width_count = (int)(placeable_width / block_size);
 		int height_count = (int)(placeable_height / block_size);
-
+		
+		System.out.println("Width count " + width_count + " height count " + height_count);
 		//get offset of grid with respect to the map
 		float x_start = (sw.map.getWidth() - placeable_width + block_size) / 2;
 		float y_start = (sw.map.getHeight() - placeable_height + block_size) / 2;
@@ -246,15 +252,18 @@ public class GenerateWaypointGraph {
 		
 		//create all the waypoint nodes for the grid
 		Waypoint[][] grid = new Waypoint[height_count][width_count];
-		for(int i = 0; i < height_count; i++) {
-			for(int j = 0; j < width_count; j++) {
+		for(int i = 0; i < height_count; i++) 
+		{
+			for(int j = 0; j < width_count; j++) 
+			{
 				grid[i][j] = new Waypoint(x_start + j*block_size, y_start + i*block_size, false);
 				waypointGraph.addWaypoint(grid[i][j]);
 				
 				//connect horizontally
 				if(j > 0) { //don't connect if first node
 					//connect based on the row
-					switch(i % 10) {
+					switch(i % 10) 
+					{
 					case 0:	case 4:
 						grid[i][j].addPath(grid[i][j-1]);	break;
 					case 1:	case 7:
@@ -292,7 +301,6 @@ public class GenerateWaypointGraph {
 						else
 							grid[i][j].addBidirectionalPath(grid[i-1][j]);
 					}
-						
 				}
 			}
 		}
@@ -300,13 +308,12 @@ public class GenerateWaypointGraph {
 		//put buckets on storage locations
 		ArrayList<Waypoint> storage_locations = new ArrayList<Waypoint>();
 		storage_locations.addAll(bucket_storage_locations.keySet());
-		for(int i = 0; i < sw.buckets.length; i++) {
+		for(int i = 0; i < sw.buckets.length; i++) 
+		{
 			Bucket b = sw.buckets[i];
 			Waypoint w = storage_locations.get(i);
-			
 			((Circle)b).setInitialPosition(w.getX(), w.getY());
 			circles.add((Circle)b);
-
 			waypointGraph.bucketSetdown(b, w);
 			bucket_storage_locations.put(w, b);
 		}
@@ -324,9 +331,11 @@ public class GenerateWaypointGraph {
 			
 			Waypoint closest = null;
 			float closest_distance = Float.POSITIVE_INFINITY; 
-			for(int i = 0; i < height_count; i++) {
+			for(int i = 0; i < height_count; i++) 
+			{
 				float dist = grid[i][0].getDistance(wa);
-				if(dist < closest_distance) {
+				if(dist < closest_distance) 
+				{
 					closest_distance = dist;
 					closest = grid[i][0];
 				}
@@ -343,41 +352,42 @@ public class GenerateWaypointGraph {
 				}
 			}
 			wc.addPath(closest, closest_distance);
-
 			wa.addPath(wb, wa.getDistance(wb));
 			wb.addPath(wc, wb.getDistance(wc));
 		}
 		
-		for(WordStation ws : sw.wordStations) {
+		for(WordStation ws : sw.wordStations) 
+		{
 			Waypoint wa = new Waypoint(ws.getX(), ws.getY() + 2.5f*ws.getRadius(), false);
 			Waypoint wb = new Waypoint(ws);
 			Waypoint wc = new Waypoint(ws.getX(), ws.getY() - 2.5f*ws.getRadius(), false);
 			waypointGraph.addWaypoint(wa);
 			waypointGraph.addWaypoint(wb);
 			waypointGraph.addWaypoint(wc);
-			
 			Waypoint closest = null;
 			float closest_distance = Float.POSITIVE_INFINITY; 
-			for(int i = 0; i < height_count; i++) {
+			for(int i = 0; i < height_count; i++) 
+			{
 				float dist = grid[i][width_count-1].getDistance(wa);
-				if(dist < closest_distance) {
+				if(dist < closest_distance) 
+				{
 					closest_distance = dist;
 					closest = grid[i][width_count-1];
 				}
 			}
 			closest.addPath(wa, closest_distance);
-			
 			closest = null;
 			closest_distance = Float.POSITIVE_INFINITY;
-			for(int i = 0; i < height_count; i++) {
+			for(int i = 0; i < height_count; i++) 
+			{
 				float dist = grid[i][width_count-1].getDistance(wc);
-				if(dist < closest_distance) {
+				if(dist < closest_distance) 
+				{
 					closest_distance = dist;
 					closest = grid[i][width_count-1];
 				}
 			}
 			wc.addPath(closest, closest_distance);
-
 			wa.addPath(wb, wa.getDistance(wb));
 			wb.addPath(wc, wb.getDistance(wc));
 		}
@@ -409,8 +419,6 @@ public class GenerateWaypointGraph {
 		//(once this is done, their positions may no longer be directly written to)
 		for(Bucket b : sw.buckets)			sw.map.addBucket(b);
 		for(Bucketbot r: sw.bucketbots)	sw.map.addRobot(r);
-		
 		return bucket_storage_locations;
 	}
-
 }

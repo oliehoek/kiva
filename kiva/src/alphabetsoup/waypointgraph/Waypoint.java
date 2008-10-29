@@ -29,7 +29,8 @@ public class Waypoint extends Circle {
 	/**Constructs a destinationWaypoint based on a LetterStation
 	 * @param ls
 	 */
-	public Waypoint(LetterStation ls) {
+	public Waypoint(LetterStation ls) 
+	{
 		super(0.0f, ls.getX(), ls.getY());
 		letterStation = ls;
 	}
@@ -37,7 +38,8 @@ public class Waypoint extends Circle {
 	/**Constructs a destinationWaypoint based on a WordStation
 	 * @param ws
 	 */
-	public Waypoint(WordStation ws) {
+	public Waypoint(WordStation ws) 
+	{
 		super(0.0f, ws.getX(), ws.getY());
 		wordStation = ws;
 	}
@@ -46,7 +48,8 @@ public class Waypoint extends Circle {
 	 *  to be a Bucket storage location
 	 * @param b
 	 */
-	public Waypoint(Bucket b) {
+	public Waypoint(Bucket b) 
+	{
 		super(0.0f, b.getX(), b.getY());
 		bucketStorageLocation = true;
 		bucket = b;
@@ -57,7 +60,8 @@ public class Waypoint extends Circle {
 	 * @param y
 	 * @param bucket_storage_location if true, then it is a valid Bucket storage location
 	 */
-	public Waypoint(float x, float y, boolean bucket_storage_location) {
+	public Waypoint(float x, float y, boolean bucket_storage_location) 
+	{
 		super(0.0f, x, y);
 		bucketStorageLocation = bucket_storage_location;
 	}
@@ -65,7 +69,8 @@ public class Waypoint extends Circle {
 	/**Gets the list of paths to other Waypoints from this Waypoint
 	 * @return Set of Waypoints
 	 */
-	public Set<Waypoint> getPaths() {
+	public Set<Waypoint> getPaths() 
+	{
 		return paths.keySet();
 	}
 
@@ -73,21 +78,24 @@ public class Waypoint extends Circle {
 	 * @param w Waypoint to add path
 	 * @param weight weight of the path
 	 */
-	public void addPath(Waypoint w, float weight) {
+	public void addPath(Waypoint w, float weight) 
+	{
 		paths.put(w, weight);
 	}
 	
 	/**Adds a path to the possible paths, using distance as the weight
 	 * @param w Waypoint to add path
 	 */
-	public void addPath(Waypoint w) {
+	public void addPath(Waypoint w) 
+	{
 		addPath(w, getDistance(w));
 	}
 
 	/**Removes a path from the possible paths
 	 * @param w Waypoint to remove path
 	 */
-	public void removePath(Waypoint w) {
+	public void removePath(Waypoint w) 
+	{
 		paths.remove(w);
 	}
 	
@@ -95,7 +103,8 @@ public class Waypoint extends Circle {
 	 * @param w Waypoint to add path
 	 * @param weight weight of the path
 	 */
-	public void addBidirectionalPath(Waypoint w, float weight) {
+	public void addBidirectionalPath(Waypoint w, float weight) 
+	{
 		paths.put(w, weight);
 		w.addPath(this, weight);
 	}
@@ -103,7 +112,8 @@ public class Waypoint extends Circle {
 	/**Adds a path to the possible paths in both directions, using distance as the weight
 	 * @param w Waypoint to add path
 	 */
-	public void addBidirectionalPath(Waypoint w) {
+	public void addBidirectionalPath(Waypoint w) 
+	{
 		float dist = getDistance(w);
 		addPath(w, dist);
 		w.addPath(this, dist);
@@ -112,7 +122,8 @@ public class Waypoint extends Circle {
 	/**Removes a path from the possible paths
 	 * @param w Waypoint to remove path
 	 */
-	public void removeBidirectionalPath(Waypoint w) {
+	public void removeBidirectionalPath(Waypoint w)
+	{
 		paths.remove(w);
 		w.removePath(this);
 	}
@@ -122,11 +133,10 @@ public class Waypoint extends Circle {
 	 * @return returns the path distance for the path to the given Waypoint,
 	 * but returns Float.POSITIVE_INFINITY if no path exists
 	 */
-	public float getPathDistance(Waypoint w) {
-		if(paths.containsKey(w))
-			return getDistance(w);
-		else
-			return Float.POSITIVE_INFINITY;
+	public float getPathDistance(Waypoint w) 
+	{
+		if(paths.containsKey(w)) return getDistance(w);
+		else return Float.POSITIVE_INFINITY;
 	}
 	
 	/**Returns the weight for a given path
@@ -188,21 +198,24 @@ public class Waypoint extends Circle {
 	/**
 	 * @return Returns the letterStation.
 	 */
-	public LetterStation getLetterStation() {
+	public LetterStation getLetterStation() 
+	{
 		return letterStation;
 	}
 
 	/**
 	 * @return Returns the wordStation.
 	 */
-	public WordStation getWordStation() {
+	public WordStation getWordStation() 
+	{
 		return wordStation;
 	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString() {
+	public String toString() 
+	{
 		DecimalFormat three_digits = new DecimalFormat("0.00");
 		return "Waypoint(" + three_digits.format(getX()) + "," + three_digits.format(getY()) + ")";
 	}

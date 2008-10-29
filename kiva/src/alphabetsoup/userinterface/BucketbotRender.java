@@ -33,8 +33,8 @@ public class BucketbotRender implements Renderable {
 		GL11.glTranslatef(bucketbot.getX(), bucketbot.getY(), 0.0f);
 
 		//draw line to destination
-		if(bucketbot.getCurrentTask() != null) {
-			
+		if(bucketbot.getCurrentTask() != null) 
+		{
 			float dest_x = 0.0f, dest_y = 0.0f;
 			float dest_x2 = 0.0f, dest_y2 = 0.0f;
 			boolean draw_line = false;
@@ -71,7 +71,7 @@ public class BucketbotRender implements Renderable {
 				}
 				break;
 			}
-draw_line = false;
+			draw_line = false;
 			if(draw_line) {
 				GL11.glColor4ub((byte)0x90, (byte)0x90, (byte)0x90, (byte)0x70);
 				GL11.glBegin(GL11.GL_LINE_STRIP);
@@ -112,47 +112,51 @@ draw_line = false;
 		RenderWindow.renderString(x, y, "Bucketbot target speed: " + df.format(bucketbot.getTargetSpeed()));
 		y += RenderWindow.getFontRenderHeight();
 
-String state_name = "idle";
-if(bucketbot.stateQueue.size() > 0)
-	state_name = bucketbot.stateQueue.get(0).getStateName();
-if(bucketbot.getCurrentTask() != null) {
-	String task_string = "task: " + bucketbot.getCurrentTask().getTaskType();
-	
-	if(bucketbot.getCurrentTask().getLetter() != null)
-		task_string += "  letter: " + bucketbot.getCurrentTask().getLetter().getLetter();
-	
-	if(bucketbot.getCurrentTask().getTargetWord() != null)
-		task_string += "  word:" + bucketbot.getCurrentTask().getTargetWord();
-
-	Bucket buckets[] = SimulationWorld.getSimulationWorld().getBuckets();
-	Bucketbot bucketbots[] = SimulationWorld.getSimulationWorld().bucketbots;
-	
-for(int i = 0; i < bucketbots.length; i++)
-	if(bucketbot == bucketbots[i]) {
-		task_string += "  bb: " + i;
-		break;
-	}
-
-RenderWindow.renderString(x, y, task_string);
-y += RenderWindow.getFontRenderHeight();
-task_string = "";
-
-for(int i = 0; i < buckets.length; i++)
-	if(bucketbot.getCurrentTask().getBucket() == buckets[i]) {
-		task_string += "bucket: " + i;
-		break;
-	}
-
-if(bucketbot.getCurrentTask().getWordStation() != null) {
-	task_string += "  word station:" + bucketbot.getCurrentTask().getWordStation().getY();
-	RenderWindow.renderString(x, y, task_string);
-	y += RenderWindow.getFontRenderHeight();
-	task_string = "";
-}
+		String state_name = "idle";
+		if(bucketbot.stateQueue.size() > 0) state_name = bucketbot.stateQueue.get(0).getStateName();
+		if(bucketbot.getCurrentTask() != null) 
+		{
+			String task_string = "task: " + bucketbot.getCurrentTask().getTaskType();	
+			if(bucketbot.getCurrentTask().getLetter() != null) 
+			{
+				task_string += "  letter: " + bucketbot.getCurrentTask().getLetter().getLetter();
+			}
+			
+			if(bucketbot.getCurrentTask().getTargetWord() != null)
+			{
+				task_string += "  word:" + bucketbot.getCurrentTask().getTargetWord();
+			}
+			Bucket buckets[] = SimulationWorld.getSimulationWorld().getBuckets();
+			Bucketbot bucketbots[] = SimulationWorld.getSimulationWorld().bucketbots;
+			
+			for(int i = 0; i < bucketbots.length; i++)
+			{
+				if(bucketbot == bucketbots[i]) {
+					task_string += "  bb: " + i;
+					break;
+				}
+			}
+			RenderWindow.renderString(x, y, task_string);
+			y += RenderWindow.getFontRenderHeight();
+			task_string = "";
+			
+			for(int i = 0; i < buckets.length; i++)
+				if(bucketbot.getCurrentTask().getBucket() == buckets[i]) {
+					task_string += "bucket: " + i;
+					break;
+				}
+			
+			if(bucketbot.getCurrentTask().getWordStation() != null) {
+				task_string += "  word station:" + bucketbot.getCurrentTask().getWordStation().getY();
+				RenderWindow.renderString(x, y, task_string);
+				y += RenderWindow.getFontRenderHeight();
+				task_string = "";
+			}
 			
 			RenderWindow.renderString(x, y, task_string);
 			y += RenderWindow.getFontRenderHeight();
 		}
+		
 		RenderWindow.renderString(x, y, "state: " + state_name);
 		y += RenderWindow.getFontRenderHeight();
 		RenderWindow.renderString(x, y, "Cruise Time: " + df.format(bucketbot.cruiseUntil - bucketbot.curTime));
@@ -161,7 +165,8 @@ if(bucketbot.getCurrentTask().getWordStation() != null) {
 		y += RenderWindow.getFontRenderHeight();
 		
 		HashMap<String, Double> times = bucketbot.getTotalTimes();
-		for(String s : times.keySet()) {
+		for(String s : times.keySet()) 
+		{
 			RenderWindow.renderString(x, y, " % " + s + " Time: " + df.format(100.0 * times.get(s) / bucketbot.curTime));
 			y += RenderWindow.getFontRenderHeight();			
 		}

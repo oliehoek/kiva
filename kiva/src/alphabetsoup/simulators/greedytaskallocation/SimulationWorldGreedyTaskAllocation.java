@@ -104,7 +104,9 @@ public class SimulationWorldGreedyTaskAllocation extends SimulationWorld
 		wordManager		= (Updateable)new WordOrderManager();
 
 		//generate waypoint graph
+		// PLACE LETTER STATION ON THE LEFT, WORD STATION ON THE RIGHT, BUCKETS IN THE RANDOM MIDDLE PLACES 
 		HashMap<Waypoint, Bucket> storage = GenerateWaypointGraph.initializeCompactRandomLayout(this, waypointGraph);
+		//HashMap<Waypoint, Bucket> storage = GenerateWaypointGraph.initializeSparseRandomLayout(this, waypointGraph);
 		for(Waypoint w : storage.keySet())
 		{
 			if(storage.get(w) == null) bucketbotManager.addNewValidBucketStorageLocation(w);

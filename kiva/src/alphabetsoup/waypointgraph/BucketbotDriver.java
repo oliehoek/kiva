@@ -29,10 +29,10 @@ public class BucketbotDriver extends BucketbotBase {
 
 	private Waypoint currentWaypoint = null;
 	
-	public BucketbotDriver(float bucketbot_radius, float bucket_pickup_setdown_time,
-			float bucketbot_max_acceleration, float bucketbot_max_velocity, float collision_penalty_time) {
-		super(bucketbot_radius, bucket_pickup_setdown_time, bucketbot_max_acceleration, bucketbot_max_velocity, collision_penalty_time);
-		
+	public BucketbotDriver(float bucketbot_radius, float bucket_pickup_setdown_time, 
+						   float bucketbot_max_acceleration, float bucketbot_max_velocity, float collision_penalty_time) 
+	{
+		super(bucketbot_radius, bucket_pickup_setdown_time, bucketbot_max_acceleration, bucketbot_max_velocity, collision_penalty_time);	
 		evadeDistance = 2.3f * getRadius();
 	}
 
@@ -40,12 +40,12 @@ public class BucketbotDriver extends BucketbotBase {
 	 * @see alphabetsoup.framework.Bucketbot#assignTask(alphabetsoup.base.BucketbotTask)
 	 */
 	//public void assignTask(Object tt) {
-	public <T> void assignTask(T tt) {
+	public <T> void assignTask(T tt) 
+	{
 		BucketbotTask t = (BucketbotTask)tt;
 		setCurrentTask(t);
 		stateQueue.clear();
-		if(t == null)
-			return;
+		if(t == null) return;
 		
 		switch(t.getTaskType()) {
 		case NONE:	break;
@@ -92,11 +92,11 @@ public class BucketbotDriver extends BucketbotBase {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Bucketbot#idle()
 	 */
-	public void idle() {
+	public void idle() 
+	{
 		manager.taskComplete(this, getCurrentTask());
 		manager.requestNewTask(this);
-		if(stateQueue.size() > 0)
-			stateQueue.get(0).act(this);
+		if(stateQueue.size() > 0) stateQueue.get(0).act(this);
 	}
 
 	public class BucketbotPickupBucket implements BucketbotState {
@@ -119,13 +119,16 @@ public class BucketbotDriver extends BucketbotBase {
 		}
 	}
 	
-	public class BucketbotSetdownBucket implements BucketbotState {
+	public class BucketbotSetdownBucket implements BucketbotState 
+	{
 		public String getStateName() { return "SetdownBucket"; }
 		Waypoint waypoint = null;
-		public BucketbotSetdownBucket(Waypoint w) {
+		public BucketbotSetdownBucket(Waypoint w) 
+		{
 			waypoint = w;
 		}
-		public void act(BucketbotBase self) {
+		public void act(BucketbotBase self) 
+		{
 			Bucket b = getBucket();
 			if(setdownBucket()) {
 				waypointGraph.bucketSetdown(b, waypoint);
@@ -225,8 +228,10 @@ public class BucketbotDriver extends BucketbotBase {
 	 * in order of direction (so they are put around in a circle)
 	 * @author Chris Hazard
 	 */
-	static private class CollideableObject implements Comparator<CollideableObject> {
-		public CollideableObject(float s, float dist, float dir) {
+	static private class CollideableObject implements Comparator<CollideableObject> 
+	{
+		public CollideableObject(float s, float dist, float dir) 
+		{
 			size = s; distance = dist; direction = dir;
 		}
 		float size, distance, direction;
@@ -358,8 +363,10 @@ public class BucketbotDriver extends BucketbotBase {
 	/**Used by getNextWaypointTo store the move search tree for A*
 	 * @author Chris Hazard
 	 */
-	private static class WaypointSearchData {
-		public WaypointSearchData(float t, float d, Waypoint w, WaypointSearchData p) {
+	private static class WaypointSearchData 
+	{
+		public WaypointSearchData(float t, float d, Waypoint w, WaypointSearchData p) 
+		{
 			distanceTraveled = t; distanceToGoal = d;	waypoint = w;	parentMove = p;
 		}
 		public float distanceTraveled;
@@ -373,7 +380,8 @@ public class BucketbotDriver extends BucketbotBase {
 	 * @param end Waypoint the Bucketbot wants to get to
 	 * @return Waypoint that is connected to start which is the best move to get towards end
 	 */
-	public Waypoint getNextWaypointTo(Waypoint start, Waypoint end) {
+	public Waypoint getNextWaypointTo(Waypoint start, Waypoint end) 
+	{
 		if(start == null || end == null)
 			return null;
 
@@ -390,12 +398,14 @@ public class BucketbotDriver extends BucketbotBase {
 		int num_iterations = 0;
 
 		//loop until end is found
-		while(true) {
+		while(true) 
+		{
 			
 			//find lowest cost waypoint in openLocations
 			Waypoint closest = null;
 			float lowest_cost = Float.POSITIVE_INFINITY;
-			for(Waypoint w : openLocations.keySet()) {
+			for(Waypoint w : openLocations.keySet()) 
+			{
 				if(openLocations.get(w).distanceTraveled + openLocations.get(w).distanceToGoal < lowest_cost) {
 					closest = w;
 					lowest_cost = openLocations.get(w).distanceTraveled + openLocations.get(w).distanceToGoal; 
@@ -566,7 +576,8 @@ public class BucketbotDriver extends BucketbotBase {
 			return false;
 		}
 		
-		public void act(BucketbotBase self) {
+		public void act(BucketbotBase self) 
+		{
 //			if(needToEvade(self))
 //				return;
 			
