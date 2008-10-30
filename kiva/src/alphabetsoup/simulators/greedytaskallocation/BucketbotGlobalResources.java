@@ -27,6 +27,11 @@ public class BucketbotGlobalResources implements Updateable, Renderable {
 		for(Bucket b : buckets) unusedBuckets.add(b);
 	}
 	
+	/**
+	 * THIS CLASS BINDS REQUESTED WORD WITHIN A WORD BY A WORK STATION  
+	 * @author Chris Hazard
+	 *
+	 */
 	public static class WordStationDeliveryRequest 
 	{
 		public WordStationDeliveryRequest(Letter l, Word w, WordStation s) 
@@ -40,10 +45,17 @@ public class BucketbotGlobalResources implements Updateable, Renderable {
 		public WordStation station;
 	}
 	
+	/**
+	 * THIS CLASS BINDS REQUESTED LETTER BY LETTER STATION
+	 * @author Chris Hazard
+	 *
+	 */
 	public static class LetterStationPickupRequest 
 	{
-		public LetterStationPickupRequest(Letter l, LetterStation s) {
-			letter = l;	station = s;
+		public LetterStationPickupRequest(Letter l, LetterStation s) 
+		{	
+			letter = l;	
+			station = s;
 		}
 		public Letter letter;
 		public LetterStation station;
@@ -76,17 +88,25 @@ public class BucketbotGlobalResources implements Updateable, Renderable {
 	 */
 	public void newWordAssignedToStation(Word w, WordStation s) 
 	{
+		// THIS IS WHERE LETTERS ARE REQUESTED
 		MersenneTwisterFast rand = SimulationWorldGreedyTaskAllocation.rand;
+		
 		for(Letter l : w.getOriginalLetters()) 
 		{
 			if(openLetterRequests.size() > 0)
+			{
+				// FOR EVERY LETTER, INSERT IN A RANDOM LOCATION
 				openLetterRequests.add(rand.nextInt(openLetterRequests.size()), new WordStationDeliveryRequest(l, w, s));
+			}
 			else
+			{
 				openLetterRequests.add(new WordStationDeliveryRequest(l, w, s));
+			}
 		}
 	}
 	
-	/**Called whenever a new Letter has been assigned to a LetterStation
+	/**
+	 * Called whenever a new Letter has been assigned to a LetterStation
 	 * @param l Letter assigned
 	 * @param s LetterStation the Letter was assigned to
 	 */
@@ -95,15 +115,20 @@ public class BucketbotGlobalResources implements Updateable, Renderable {
 		//MersenneTwisterFast rand = SimulationWorldGraphExample.rand;
 		MersenneTwisterFast rand = SimulationWorldGreedyTaskAllocation.rand;
 		if(availableLetters.size() > 0)
+		{
 			availableLetters.add(rand.nextInt(availableLetters.size()), new LetterStationPickupRequest(l, s));
+		}
 		else
+		{
 			availableLetters.add(new LetterStationPickupRequest(l, s));
+		}
 	}
 	
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Updateable#getNextEventTime(double)
 	 */
-	public double getNextEventTime(double cur_time) {
+	public double getNextEventTime(double cur_time) 
+	{
 		return Double.POSITIVE_INFINITY;
 	}
 

@@ -17,8 +17,8 @@ import alphabetsoup.framework.Updateable;
  * but does not have logic to control them.  BucketbotBase should be extended to include logic.
  * @author Chris Hazard
  */
-public class BucketbotBase extends Circle implements Bucketbot, Updateable {
-	
+public class BucketbotBase extends Circle implements Bucketbot, Updateable 
+{	
 	private float bucketPickupSetdownTime;
 	private float maxAcceleration;
 	private float maxVelocity;
@@ -83,14 +83,14 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 		 */
 		public void act(BucketbotBase self);
 	};
+	
 	public List<BucketbotState> stateQueue = new ArrayList<BucketbotState>(); 
 	
 	public BucketbotBase(float bucketbot_radius, float bucket_pickup_setdown_time,
-			float bucketbot_max_acceleration, float bucketbot_max_velocity, float collision_penalty_time) {
+			float bucketbot_max_acceleration, float bucketbot_max_velocity, float collision_penalty_time) 
+	{
 		super(bucketbot_radius);
-		
 		resetStatistics();
-		
 		bucketPickupSetdownTime = bucket_pickup_setdown_time;
 		maxAcceleration = bucketbot_max_acceleration;
 		maxVelocity = bucketbot_max_velocity;
@@ -114,10 +114,13 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 	 * @param angle2
 	 * @return difference of angle2-angle1, normalized to [0,pi]
 	 */
-	public float angleDifference(float angle1, float angle2) {
+	public float angleDifference(float angle1, float angle2) 
+	{
 		double relative_direction = angle2 - angle1;
+		
 		if(relative_direction >= Math.PI)
 			relative_direction -= 2*Math.PI;
+		
 		else if(relative_direction <= -Math.PI)
 			relative_direction += 2*Math.PI;
 		return (float)relative_direction;
@@ -162,13 +165,13 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Bucketbot#setdownBucket()
 	 */
-	final public boolean setdownBucket() {
-		if(bucket == null)
-			return false;
+	final public boolean setdownBucket() 
+	{
+		if(bucket == null) return false;
 		//can't set down while moving
-		if(getSpeed() > 0.0f)
-			return false;
-		if(bucket != null) {
+		if(getSpeed() > 0.0f) return false;
+		if(bucket != null) 
+		{
 			blockedUntil = curTime + bucketPickupSetdownTime;
 			numSetdowns++;
 		}
@@ -205,9 +208,9 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Updateable#update(double, double)
 	 */
-	public void update(double last_time, double cur_time) {
-		if(cur_time < blockedUntil)
-			return;
+	public void update(double last_time, double cur_time) 
+	{
+		if(cur_time < blockedUntil) return;
 		curTime = cur_time;
 		double time_delta = (cur_time - last_time);
 
@@ -220,7 +223,8 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 		yVelocity = targetYVelocity;
 
 		//clamp velocity
-		if(xVelocity*xVelocity + yVelocity*yVelocity > maxVelocity*maxVelocity) {
+		if(xVelocity*xVelocity + yVelocity*yVelocity > maxVelocity*maxVelocity) 
+		{
 			float velocity_magnitude = (float)Math.sqrt(xVelocity*xVelocity + yVelocity*yVelocity);
 			xVelocity = maxVelocity * (xVelocity/velocity_magnitude);
 			yVelocity = maxVelocity * (yVelocity/velocity_magnitude);
@@ -229,7 +233,8 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 		//clamp acceleration
 		double x_accel = (float)( (xVelocity - old_x_velocity) / time_delta );
 		double y_accel = (float)( (yVelocity - old_y_velocity) / time_delta );
-		if( x_accel*x_accel + y_accel*y_accel > maxAcceleration*maxAcceleration) {
+		if( x_accel*x_accel + y_accel*y_accel > maxAcceleration*maxAcceleration) 
+		{
 			double accel_magnitude = Math.sqrt(x_accel*x_accel + y_accel*y_accel);
 			xVelocity = (float)(old_x_velocity + maxAcceleration*time_delta * (x_accel/accel_magnitude));
 			yVelocity = (float)(old_y_velocity + maxAcceleration*time_delta * (y_accel/accel_magnitude));
@@ -242,7 +247,8 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 		float y_new = (float)(yVelocity * time_delta + getY());
 
 		//try to make move.  if can't move due to a collision, then stop
-		if(!SimulationWorld.getSimulationWorld().getMap().moveBucketbot(this, x_new, y_new)) {
+		if(!SimulationWorld.getSimulationWorld().getMap().moveBucketbot(this, x_new, y_new)) 
+		{
 			xVelocity = 0.0f;
 			yVelocity = 0.0f;
 			targetXVelocity = 0.0f;
@@ -253,39 +259,32 @@ public class BucketbotBase extends Circle implements Bucketbot, Updateable {
 		}
 		
 		//set moving flags
-		if(xVelocity == 0.0f && yVelocity == 0.0f)
-			setMoving(false);
-		else
-			setMoving(true);
-		if(getBucket() != null)
-			((Circle)getBucket()).setMoving(isMoving());
+		if(xVelocity == 0.0f && yVelocity == 0.0f) setMoving(false);
+		else setMoving(true);
+		
+		if(getBucket() != null) ((Circle)getBucket()).setMoving(isMoving());
 		
 		//count distanceTraveled
 		distanceTraveled += Math.sqrt( (x_new-x_old)*(x_new-x_old) + (y_new-y_old)*(y_new-y_old));
 
 		//compute time in previous task and state
-		if(currentTask != null) {
+		if(currentTask != null) 
+		{
 			String s = currentTask.getTaskType().toString();
-			if(totalTimes.containsKey(s))
-				totalTimes.put(s, totalTimes.get(s) + curTime - taskStartTime);
-			else
-				totalTimes.put(s, curTime - taskStartTime);
+			if(totalTimes.containsKey(s)) totalTimes.put(s, totalTimes.get(s) + curTime - taskStartTime);
+			else totalTimes.put(s, curTime - taskStartTime);
 		}
 		
-		if(stateQueue.size() > 0) {
+		if(stateQueue.size() > 0) 
+		{
 			String s = stateQueue.get(0).getStateName();
-			if(totalTimes.containsKey(s))
-				totalTimes.put(s, totalTimes.get(s) + curTime - taskStartTime);
-			else
-				totalTimes.put(s, curTime - taskStartTime);
+			if(totalTimes.containsKey(s)) totalTimes.put(s, totalTimes.get(s) + curTime - taskStartTime);
+			else totalTimes.put(s, curTime - taskStartTime);
 		}
 		
 		taskStartTime = curTime;
-
-		if(stateQueue.size() > 0)
-			stateQueue.get(0).act(this);
-		else
-			idle();
+		if(stateQueue.size() > 0) stateQueue.get(0).act(this);
+		else idle();
 	}
 	
 	

@@ -15,7 +15,8 @@ import alphabetsoup.framework.Letter;
 public class LetterStationRender implements Renderable {
 
 	LetterStationBase letterStation = null;
-	public LetterStationRender(LetterStationBase letterStation) {
+	public LetterStationRender(LetterStationBase letterStation) 
+	{
 		this.letterStation = letterStation;
 	}
 	
@@ -24,7 +25,8 @@ public class LetterStationRender implements Renderable {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Renderable#render()
 	 */
-	public void render() {
+	public void render() 
+	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef(letterStation.getX(), letterStation.getY(), 0.0f);
 		
@@ -43,14 +45,16 @@ public class LetterStationRender implements Renderable {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Renderable#renderDetails()
 	 */
-	public void renderDetails() {
+	public void renderDetails() 
+	{
 		float x = 10.0f, y = 100.0f;
 		GL11.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 		RenderWindow.renderString(x, y, "Letter Station");
 		y += RenderWindow.getFontRenderHeight();
 		RenderWindow.renderString(x, y, "Bundle size: " + letterStation.getBundleSize());
 		y += RenderWindow.getFontRenderHeight();
-		for(Letter l : letterStation.assignedLetters) {
+		for(Letter l : letterStation.assignedLetters) 
+		{
 			RenderWindow.renderTiledLetter(x, y, l, true);
 			x += RenderWindow.getFontTileRenderWidth();
 		}
@@ -59,7 +63,8 @@ public class LetterStationRender implements Renderable {
 		GL11.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 		
 		//render additional info
-		for(String s : letterStation.getAdditionalInfo()) {
+		for(String s : letterStation.getAdditionalInfo()) 
+		{
 			RenderWindow.renderString(x, y, s);
 			y += RenderWindow.getFontRenderHeight();
 		}

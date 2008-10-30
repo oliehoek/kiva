@@ -5,19 +5,19 @@ package alphabetsoup.waypointgraph;
 
 import alphabetsoup.framework.*;
 import alphabetsoup.userinterface.Renderable;
-
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.glu.Disk;
 
-/**WaypointGraphRender draws the Waypoint graph.
+/**
+ * WaypointGraphRender draws the Waypoint graph.
  * @author Chris Hazard
  */
 public class WaypointGraphRender implements Renderable {
 
 	WaypointGraph waypointGraph = null;
 	
-	public WaypointGraphRender(WaypointGraph waypointGraph) {
+	public WaypointGraphRender(WaypointGraph waypointGraph) 
+	{
 		this.waypointGraph = waypointGraph;
 	}
 	
@@ -26,9 +26,11 @@ public class WaypointGraphRender implements Renderable {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Renderable#render()
 	 */
-	public void render() {
+	public void render() 
+	{
 		GL11.glLineWidth(2.0f);
-		for(Waypoint w : waypointGraph.getWaypoints()) {
+		for(Waypoint w : waypointGraph.getWaypoints()) 
+		{
 			//draw the center
 			GL11.glPushMatrix();
 			GL11.glTranslatef(w.getX(), w.getY(), 0.0f);
@@ -37,7 +39,8 @@ public class WaypointGraphRender implements Renderable {
 			
 			//draw the paths
 			GL11.glBegin(GL11.GL_LINES);
-			for(Waypoint path : w.getPaths()) {
+			for(Waypoint path : w.getPaths()) 
+			{
 				GL11.glColor4ub((byte)0xC0, (byte)0x0, (byte)0x0, (byte)0x80);
 				GL11.glVertex2f(w.getX(), w.getY());
 				GL11.glColor4ub((byte)0x0, (byte)0xC0, (byte)0x0, (byte)0x80);

@@ -17,9 +17,8 @@ public class SimulationWorldGreedyTaskAllocation extends SimulationWorld
 {
 	private double simulationDuration = 0.0;
 	private double simulationWarmupTime = 0.0;
-	
 	public LetterManager letterManager = null;
-	public Updateable wordManager = null;						// WHERE IS IT IMPLEMENTED?
+	public Updateable wordManager = null;						// WordOrderManager
 	public BucketbotGlobalResources bucketbotManager = null; 	// THIS IS NOT THE INSTANCE OF CLASS BucketbotManager
 	public WaypointGraph waypointGraph = null;
 	public BucketbotAgent bucketbotagents[] = null;	// ONE BUCKET BOT HAS A BUCKET BOT AGEENT
@@ -36,7 +35,6 @@ public class SimulationWorldGreedyTaskAllocation extends SimulationWorld
 		// 1. INITIALIZE BUCKET, BUCKETBOT WORDSTATION, LETTERSTATION
 		// 2. INITIALIZE BUCKET CONTENT
 		super("kiva.config");
-		
 		simulationWorldGraphExample = this;
 		
 		float bucketbot_size = Float.parseFloat(params.getProperty("bucketbot_size"));
@@ -129,7 +127,16 @@ public class SimulationWorldGreedyTaskAllocation extends SimulationWorld
 		updateables.add((Updateable)letterManager);
 		for(WordStation s : wordStations) updateables.add((Updateable)s);
 		for(LetterStation s : letterStations) updateables.add((Updateable)s);
+		/*
+		int counter = 0;
+		for(Updateable obj : updateables)
+		{
+			counter++;
+			System.out.println("Class name " + obj.getClass().getName());
+		}
+		System.out.println("Number of object is " + counter);
 		//System.exit(1);
+		*/
 		
 		//finish adding things to be rendered
 		if(usingGUI)

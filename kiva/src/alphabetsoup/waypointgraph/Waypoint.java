@@ -109,7 +109,8 @@ public class Waypoint extends Circle {
 		w.addPath(this, weight);
 	}
 	
-	/**Adds a path to the possible paths in both directions, using distance as the weight
+	/**
+	 * Adds a path to the possible paths in both directions, using distance as the weight
 	 * @param w Waypoint to add path
 	 */
 	public void addBidirectionalPath(Waypoint w) 
@@ -119,7 +120,8 @@ public class Waypoint extends Circle {
 		w.addPath(this, dist);
 	}
 
-	/**Removes a path from the possible paths
+	/**
+	 * Removes a path from the possible paths
 	 * @param w Waypoint to remove path
 	 */
 	public void removeBidirectionalPath(Waypoint w)

@@ -12,8 +12,8 @@ import alphabetsoup.waypointgraph.*;
 /**
  * @author Chris Hazard
  */
-public class BucketbotAgent implements BucketbotManager, Updateable {
-	
+public class BucketbotAgent implements BucketbotManager, Updateable 
+{
 	BucketbotDriver bucketbot = null;
 	BucketbotGlobalResources manager = null;
 	Map map = null;
@@ -37,7 +37,8 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	 * @param w
 	 * @return estimated travel time
 	 */
-	public float estimateTravelTime(Waypoint w) {
+	public float estimateTravelTime(Waypoint w) 
+	{
 		float travel_time = bucketbot.getDistance(w) / bucketbot.getMaxVelocity();
 		return travel_time;
 	}
@@ -79,7 +80,8 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	/**Tells bucketbot to store its current bucket at the specified waypoint
 	 * @param w
 	 */
-	public void storeBucketAtStorageLocation(Waypoint w) {
+	public void storeBucketAtStorageLocation(Waypoint w) 
+	{
 		//if have a storage location, but it's not the closest, then free it
 		if(reservedStorage != null && reservedStorage != w) {
 			manager.unusedBucketStorageLocations.add(manager.usedBucketStorageLocations.get(reservedStorage) );
@@ -122,7 +124,8 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 		cancelCurrentLetterDelivery();
 		cancelCurrentLetterPickup();
 		
-		if(bucketbot.getBucket() != null) {
+		if(bucketbot.getBucket() != null) 
+		{
 			storeBucketAtClosestStorageLocation();
 			return;
 		}
@@ -145,39 +148,40 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	 * Returns the bucket that should be used, null if it's carying a bucket
 	 * and the current bucket won't work (too full).
 	 */
-	public Bucket reserveBestLetterToPickUp() {
+	public Bucket reserveBestLetterToPickUp() 
+	{
 		int bundle_size = map.getLetterStations().get(0).getBundleSize();
 			
 		//if have a current bucket
-		if(reservedBucket != null || bucketbot.getBucket() != null) {
+		if(reservedBucket != null || bucketbot.getBucket() != null) 
+		{
 			Bucket b = bucketbot.getBucket();
-			if(b == null)
-				b = reservedBucket;
+			if(b == null) b = reservedBucket;
 			
 			//if no room, get rid of the current bucket
-			if(b.getLetters().size() + bundle_size > b.getCapacity())
-				return null;
+			if(b.getLetters().size() + bundle_size > b.getCapacity()) return null;
 			
 			//current bucket works, so find closest letter station and best task
 			float closest_letter_station_time = Float.POSITIVE_INFINITY;
 			LetterStationPickupRequest best_pickup = null;
 
 			//check all tasks
-			for(LetterStationPickupRequest lspr : manager.availableLetters) {
+			for(LetterStationPickupRequest lspr : manager.availableLetters) 
+			{
 				//see how long it would take to get to this letter station
 				// chose the worst of delivering or waiting
 				Waypoint sw = waypointGraph.getLetterStationWaypoint(lspr.station);
 				float time = Math.max( estimateTravelTime(bucketbot.getCurrentWaypoint(), sw), estimateLetterStationWaitTime(sw) );
 				
 				//if it's the best, then use it
-				if(time < closest_letter_station_time) {
+				if(time < closest_letter_station_time) 
+				{
 					best_pickup = lspr;
 					closest_letter_station_time = time;
 				}
 			}
 			
-			if(best_pickup == null)
-				return null;
+			if(best_pickup == null) return null;
 
 			//allocate task!
 			targetLetter = best_pickup.letter;
@@ -197,16 +201,19 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 			float pickup_time = estimateTravelTime(waypointGraph.getBucketWaypoint(b));
 
 			//check all tasks
-			for(LetterStationPickupRequest lspr : manager.availableLetters) {
+			for(LetterStationPickupRequest lspr : manager.availableLetters) 
+			{
 				//if it has room
-				if(b.getLetters().size() + lspr.station.getBundleSize() <= b.getCapacity()) {
+				if(b.getLetters().size() + lspr.station.getBundleSize() <= b.getCapacity()) 
+				{
 					//see how long it would take to get to this letter station
 					// chose the worst of delivering or waiting
 					Waypoint sw = waypointGraph.getLetterStationWaypoint(lspr.station);
 					float deliver_time = Math.max( estimateTravelTime(waypointGraph.getBucketWaypoint(b), sw), estimateLetterStationWaitTime(sw) );
 					
 					//if it's the best, then use it
-					if(pickup_time + deliver_time < best_pickup_time) {
+					if(pickup_time + deliver_time < best_pickup_time) 
+					{
 						best_pickup = lspr;
 						best_pickup_time = pickup_time + deliver_time;
 						best_bucket = b;
@@ -215,17 +222,13 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 			}
 		}
 		
-		if(best_pickup == null)
-			return null;
-		
+		if(best_pickup == null) return null;
 		targetLetter = best_pickup.letter;
 		targetLetterStation = best_pickup.station;
 		manager.availableLetters.remove(best_pickup);
-		
 		return best_bucket;
 	}
 	
-
 	WordStationDeliveryRequest bestDeliveryRequest = null;
 	float bestTimeForDeliveryRequest = 0.0f;
 	Letter bestLetterForDeliveryRequest = null;
@@ -300,11 +303,11 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 			//if need to set down current bucket
 			if(bucketbot.getBucket() != null) 
 			{
-				
 				//grab this once to pull it out of the loop
 				Waypoint target_bucket_waypoint = waypointGraph.getBucketWaypoint(b);	
 				float min_storage_time = Float.POSITIVE_INFINITY;
-				for(Waypoint w : manager.unusedBucketStorageLocations) {
+				for(Waypoint w : manager.unusedBucketStorageLocations) 
+				{
 					//need time to set down current bucket and also pick up new bucket
 					float store_time = 2 * bucketbot.getBucketPickupSetdownTime();
 					
@@ -313,12 +316,12 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 					//find time to get from storage location to new bucket
 					store_time += estimateTravelTime(w, target_bucket_waypoint);
 					
-					if(store_time < min_storage_time) {
+					if(store_time < min_storage_time) 
+					{
 						min_storage_time = store_time;
 						best_storage_location_for_this_bucket = w;
 					}				
 				}
-				
 				//use the best waypoint
 				t += min_storage_time;
 			}
@@ -341,9 +344,7 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 		}
 
 		//if found no task, take the oldest
-		if(best_task == null)
-			best_task = manager.openLetterRequests.get(0);
-		
+		if(best_task == null) best_task = manager.openLetterRequests.get(0);
 		targetLetter = best_task.letter;
 		targetWord = best_task.word;
 		targetWordStation = best_task.station;
@@ -355,7 +356,8 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	
 	/**Frees the resources allocated to the bucketbot for its current letter delivery task
 	 */
-	public void cancelCurrentLetterDelivery() {
+	public void cancelCurrentLetterDelivery() 
+	{
 		if(targetLetter != null && targetWord != null && targetWordStation != null)
 			manager.openLetterRequests.add(new BucketbotGlobalResources.WordStationDeliveryRequest(targetLetter, targetWord, targetWordStation));
 		targetLetter = null;
@@ -366,7 +368,8 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	
 	/**Frees the resources allocated to the bucketbot for its current letter pickup task
 	 */
-	public void cancelCurrentLetterPickup() {
+	public void cancelCurrentLetterPickup() 
+	{
 		if(targetLetter != null && targetLetterStation != null)
 			manager.availableLetters.add(new BucketbotGlobalResources.LetterStationPickupRequest(targetLetter, targetLetterStation));
 		targetLetter = null;
@@ -376,29 +379,29 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	/**Finds the best letter delivery task and then executes it
 	 * @return false if don't have available task
 	 */
-	public boolean doDeliverLetterTask() {
-		if(manager.openLetterRequests.size() == 0)
-			return false;
-			
+	public boolean doDeliverLetterTask() 
+	{
+		if(manager.openLetterRequests.size() == 0) return false;
 		Bucket best_bucket = getBestDeliveryTask();
 		
 		//if no bucket, then get one
-		if(reservedBucket == null) {
+		if(reservedBucket == null) 
+		{
 			reservedBucket = best_bucket;
-			
 			//no good buckets!
-			if(reservedBucket == null) {
+			if(reservedBucket == null) 
+			{
 				cancelCurrentLetterDelivery();
 				return false;
 			}
-			
 			//reserve the bucket
 			manager.unusedBuckets.remove(reservedBucket);
 			manager.usedBuckets.add(reservedBucket);
 		}
 		else { //already have a bucket... see if it's the best one
 			//if don't have the best bucket for the job, then store the old one
-			if(reservedBucket != best_bucket) {
+			if(reservedBucket != best_bucket) 
+			{
 				manager.openLetterRequests.add(new BucketbotGlobalResources.WordStationDeliveryRequest(targetLetter, targetWord, targetWordStation));
 				targetLetter = null;
 				targetWord = null;
@@ -420,18 +423,20 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	/**Finds the best letter pickup task and then executes it
 	 * @return false if don't have a task
 	 */
-	public boolean doPickupLetterTask() {
+	public boolean doPickupLetterTask() 
+	{
 		//make sure there's a letter available to get
-		if(manager.availableLetters.size() == 0)
-			return false;
+		if(manager.availableLetters.size() == 0) return false;
 
 		Bucket best_bucket = reserveBestLetterToPickUp();
 		
-		if(reservedBucket == null) {
+		if(reservedBucket == null) 
+		{
 			reservedBucket = best_bucket;
 			
 			//no free buckets!
-			if(reservedBucket == null) {
+			if(reservedBucket == null) 
+			{
 				//cancel task reservation and store the bucket
 				cancelCurrentLetterPickup();
 				return false;
@@ -443,7 +448,8 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 		}
 		else { //already have a bucket... see if it's the best one
 			//if don't have the best bucket for the job, then store the old one
-			if(reservedBucket != best_bucket) {
+			if(reservedBucket != best_bucket) 
+			{
 				//cancel task reservation and store the bucket
 				cancelCurrentLetterPickup();
 				storeBucketAtClosestStorageLocation();
@@ -459,30 +465,30 @@ public class BucketbotAgent implements BucketbotManager, Updateable {
 	
 	/**Bucketbots should call requestNewTask of their corresponding BucketbotAgent when they are idle and have no tasks
 	 */
-	public void requestNewTask(Bucketbot r) {
+	public void requestNewTask(Bucketbot r) 
+	{
 		manager = SimulationWorldGreedyTaskAllocation.getSimulationWorld().bucketbotManager;
 		map = SimulationWorldGreedyTaskAllocation.getSimulationWorld().map;
 		waypointGraph = SimulationWorldGreedyTaskAllocation.getSimulationWorld().waypointGraph;
 
-		if(deliver_mode) {
-			if(doDeliverLetterTask())
-				return;
-			
-			if(doPickupLetterTask()) {
+		if(deliver_mode) 
+		{
+			if(doDeliverLetterTask()) return;
+			if(doPickupLetterTask()) 
+			{
 				deliver_mode = false;
 				return;
 			}
 		}
-		else {
-			if(doPickupLetterTask())
-				return;
-			
-			if(doDeliverLetterTask()) {
+		else 
+		{
+			if(doPickupLetterTask()) return;
+			if(doDeliverLetterTask()) 
+			{
 				deliver_mode = true;
 				return;
 			}
 		}
-
 		getOutOfTheWay();		
 	}
 	

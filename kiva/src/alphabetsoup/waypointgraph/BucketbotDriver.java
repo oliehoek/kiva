@@ -4,7 +4,6 @@
 package alphabetsoup.waypointgraph;
 
 import java.util.*;
-
 import alphabetsoup.base.BucketbotBase;
 import alphabetsoup.base.BucketbotTask;
 import alphabetsoup.framework.*;
@@ -14,8 +13,8 @@ import alphabetsoup.framework.Map;
  * but only evades other buckets and bucketbots by trying to go directly around.
  * @author Chris Hazard
  */
-public class BucketbotDriver extends BucketbotBase {
-
+public class BucketbotDriver extends BucketbotBase 
+{
 	public float frustration = 0.0f;	//0.0->1.0 for maximal frustration
 	int stuckCount = 0;			//number of updates not able to move at all
 	static final double sqrt2 = Math.sqrt(2.0);
@@ -46,46 +45,46 @@ public class BucketbotDriver extends BucketbotBase {
 		setCurrentTask(t);
 		stateQueue.clear();
 		if(t == null) return;
-		
-		switch(t.getTaskType()) {
-		case NONE:	break;
-		case CANCEL:	break;
-		case MOVE:
-			if(t.getDestination() instanceof Waypoint)
-				stateQueue.add(new BucketbotMove((Waypoint)t.getDestination()));
-			else
-				stateQueue.add(new BucketbotMove(t.getDestinationX(), t.getDestinationY()));
-			break;
-		case STORE_BUCKET:
-			if(t.getBucket() != getBucket()) {
-				manager.taskAborted(this, t);
-				return;
-			}
-			
-			//if don't have bucket requested to store, then go get it 
-			if(getBucket() == null) {
-				stateQueue.add(new BucketbotMove(waypointGraph.getBucketWaypoint(t.getBucket())));
-				stateQueue.add(new BucketbotPickupBucket(t.getBucket()));
-			}
-			stateQueue.add(new BucketbotMove((Waypoint)t.getBucketStorageLocation()));
-			stateQueue.add(new BucketbotSetdownBucket((Waypoint)t.getBucketStorageLocation()));
-			break;
-		case TAKE_BUCKET_TO_LETTER_STATION:
-			if(t.getBucket() != getBucket()) {
-				stateQueue.add(new BucketbotMove(waypointGraph.getBucketWaypoint(t.getBucket())));
-				stateQueue.add(new BucketbotPickupBucket(t.getBucket()));
-			}
-			stateQueue.add(new BucketbotMove( waypointGraph.getLetterStationWaypoint(t.getLetterStation()) ));
-			stateQueue.add(new BucketbotGetLetter(t.getLetter(), t.getLetterStation()));
-			break;
-		case TAKE_BUCKET_TO_WORD_STATION:
-			if(t.getBucket() != getBucket()) {
-				stateQueue.add(new BucketbotMove(waypointGraph.getBucketWaypoint(t.getBucket())));
-				stateQueue.add(new BucketbotPickupBucket(t.getBucket()));
-			}
-			stateQueue.add(new BucketbotMove( waypointGraph.getWordStationWaypoint(t.getWordStation()) ));
-			stateQueue.add(new BucketbotPutLetter(t.getLetter(), t.getWordStation()));
-			break;
+		switch(t.getTaskType()) 
+		{
+			case NONE:	break;
+			case CANCEL:	break;
+			case MOVE:
+				if(t.getDestination() instanceof Waypoint)
+					stateQueue.add(new BucketbotMove((Waypoint)t.getDestination()));
+				else
+					stateQueue.add(new BucketbotMove(t.getDestinationX(), t.getDestinationY()));
+				break;
+			case STORE_BUCKET:
+				if(t.getBucket() != getBucket()) {
+					manager.taskAborted(this, t);
+					return;
+				}
+				
+				//if don't have bucket requested to store, then go get it 
+				if(getBucket() == null) {
+					stateQueue.add(new BucketbotMove(waypointGraph.getBucketWaypoint(t.getBucket())));
+					stateQueue.add(new BucketbotPickupBucket(t.getBucket()));
+				}
+				stateQueue.add(new BucketbotMove((Waypoint)t.getBucketStorageLocation()));
+				stateQueue.add(new BucketbotSetdownBucket((Waypoint)t.getBucketStorageLocation()));
+				break;
+			case TAKE_BUCKET_TO_LETTER_STATION:
+				if(t.getBucket() != getBucket()) {
+					stateQueue.add(new BucketbotMove(waypointGraph.getBucketWaypoint(t.getBucket())));
+					stateQueue.add(new BucketbotPickupBucket(t.getBucket()));
+				}
+				stateQueue.add(new BucketbotMove( waypointGraph.getLetterStationWaypoint(t.getLetterStation()) ));
+				stateQueue.add(new BucketbotGetLetter(t.getLetter(), t.getLetterStation()));
+				break;
+			case TAKE_BUCKET_TO_WORD_STATION:
+				if(t.getBucket() != getBucket()) {
+					stateQueue.add(new BucketbotMove(waypointGraph.getBucketWaypoint(t.getBucket())));
+					stateQueue.add(new BucketbotPickupBucket(t.getBucket()));
+				}
+				stateQueue.add(new BucketbotMove( waypointGraph.getWordStationWaypoint(t.getWordStation()) ));
+				stateQueue.add(new BucketbotPutLetter(t.getLetter(), t.getWordStation()));
+				break;
 		}
 	}
 	
@@ -99,7 +98,8 @@ public class BucketbotDriver extends BucketbotBase {
 		if(stateQueue.size() > 0) stateQueue.get(0).act(this);
 	}
 
-	public class BucketbotPickupBucket implements BucketbotState {
+	public class BucketbotPickupBucket implements BucketbotState 
+	{
 		public String getStateName() { return "PickupBucket"; }
 		Bucket bucket;
 		public BucketbotPickupBucket(Bucket b) {
@@ -130,7 +130,8 @@ public class BucketbotDriver extends BucketbotBase {
 		public void act(BucketbotBase self) 
 		{
 			Bucket b = getBucket();
-			if(setdownBucket()) {
+			if(setdownBucket()) 
+			{
 				waypointGraph.bucketSetdown(b, waypoint);
 				manager.bucketSetDown(self, b, waypoint);
 				stateQueue.remove(0);
@@ -142,16 +143,19 @@ public class BucketbotDriver extends BucketbotBase {
 		}
 	}
 	
-	public class BucketbotGetLetter implements BucketbotState {
+	public class BucketbotGetLetter implements BucketbotState 
+	{
 		public String getStateName() { return "GetLetter"; }
 		Letter letter;
 		LetterStation station;
 		boolean requested_letters = false;
-		public BucketbotGetLetter(Letter l, LetterStation s) {
-			letter = l;	station = s;
+		public BucketbotGetLetter(Letter l, LetterStation s) 
+		{
+			letter = l;	
+			station = s;
 		}
-		public void act(BucketbotBase self) {
-	
+		public void act(BucketbotBase self) 
+		{
 			//make sure bucketbot is in vacinity of station, otherwise go there
 			if(self.getDistance(station.getX(), station.getY()) > map.getTolerance()) {
 				stateQueue.add(0, new BucketbotMove(station.getX(), station.getY()));
@@ -183,7 +187,8 @@ public class BucketbotDriver extends BucketbotBase {
 		}
 	}
 	
-	public class BucketbotPutLetter implements BucketbotState {
+	public class BucketbotPutLetter implements BucketbotState 
+	{
 		public String getStateName() { return "PutLetter"; }
 		Letter letter;
 		WordStation station;
@@ -316,45 +321,41 @@ public class BucketbotDriver extends BucketbotBase {
 		return evade_direction;
 	}
 
-	public class BucketbotEvade implements BucketbotState {
+	public class BucketbotEvade implements BucketbotState 
+	{
 		public String getStateName() { return "Evade"; }
-		public void act(BucketbotBase self) {
+		public void act(BucketbotBase self) 
+		{
 			setDrawBolded(true);
-			
-			if(curTime < cruiseUntil)
-				return;
-			
+			if(curTime < cruiseUntil) return;
 			MersenneTwisterFast rand = SimulationWorld.rand;
 			
 			//if doing something else (stateQueue isn't empty), are trying to move to a new location,
 			// but there's another bucketbot at that location, then sit and wait most of the time
 			if(stateQueue.size() > 1
 					&& stateQueue.get(1).getClass() == BucketbotMove.class
-					&& !map.isBucketbotMoveValid(self,
-							((BucketbotMove)stateQueue.get(1)).moveToX, ((BucketbotMove)stateQueue.get(1)).moveToY)) {
+					&& !map.isBucketbotMoveValid(self, ((BucketbotMove)stateQueue.get(1)).moveToX, ((BucketbotMove)stateQueue.get(1)).moveToY)) 
+			{
 				
 				//usually sit and wait
-				if(rand.nextFloat() < .9f) {
+				if(rand.nextFloat() < .9f) 
+				{
 					//setTargetSpeed(0.0f);
 					//setTargetSpeed(getSpeed() * .9f);
 					return;
 				}
 			}
-
 			setTargetSpeed(getMaxVelocity());
 			//cruiseUntil = curTime + getRadius() / getMaxVelocity() / 2;
 			cruiseUntil = curTime + (Math.sqrt(2 * getMaxAcceleration() * getRadius() + getMaxVelocity() * getMaxVelocity()) - getMaxVelocity()) / getMaxAcceleration() / 2;
-			
 			float new_direction = getBestEvadeDirection(evadeDistance);
-			if(getDirection() != new_direction)
-				setDirection(new_direction);
-
-			if(rand.nextFloat() < .75f){
+			if(getDirection() != new_direction) setDirection(new_direction);
+			if(rand.nextFloat() < .75f)
+			{
 				stateQueue.remove(0);
 				setDrawBolded(false);
 				setCurrentWaypoint(waypointGraph.getClosestWaypoint(self));
-				if(stateQueue.size() > 0)
-					stateQueue.get(0).act(self);
+				if(stateQueue.size() > 0) stateQueue.get(0).act(self);
 			}
 		}
 	}
@@ -382,16 +383,14 @@ public class BucketbotDriver extends BucketbotBase {
 	 */
 	public Waypoint getNextWaypointTo(Waypoint start, Waypoint end) 
 	{
-		if(start == null || end == null)
-			return null;
+		if(start == null || end == null) return null;
 
 		HashMap<Waypoint, WaypointSearchData> openLocations = new HashMap<Waypoint, WaypointSearchData>();
 		HashMap<Waypoint, WaypointSearchData> closedLocations = new HashMap<Waypoint, WaypointSearchData>();
 		openLocations.put(start, new WaypointSearchData(0.0f, start.getDistance(end), start, null) );
 		
 		//don't move if already at destination
-		if(start == end)
-			return null;
+		if(start == end) return null;
 		
 		//maximum number of waypoints to look at in search
 		int max_num_iterations = 1000;
@@ -630,15 +629,13 @@ public class BucketbotDriver extends BucketbotBase {
 			//if not facing the right way (within tolerance), or heading outside of the map, turn so it is a good direction
 			double projected_x = getX() + goal_distance * Math.cos(getDirection());
 			double projected_y = getY() + goal_distance * Math.sin(getDirection());
-			if( (projected_x - moveToX) * (projected_x - moveToX)
-						+ (projected_y - moveToY) * (projected_y - moveToY)
+			if( (projected_x - moveToX) * (projected_x - moveToX) + (projected_y - moveToY) * (projected_y - moveToY)
 					>= tolerance * tolerance 
 					|| projected_x + getRadius() > map.getWidth() || projected_x - getRadius() < 0.0
 					|| projected_y + getRadius() > map.getHeight() || projected_y - getRadius() < 0.0 ) {
 
 				setDirection((float)Math.atan2(moveToY - getY(), moveToX - getX()));
-				if(cur_speed > 0)
-					setTargetSpeed(0.0f);
+				if(cur_speed > 0) setTargetSpeed(0.0f);
 				cruiseUntil = getAccelerateUntil();
 				return;
 			}
@@ -648,7 +645,8 @@ public class BucketbotDriver extends BucketbotBase {
 			//if too close to stop, then stop as fast as possible
 			float decel_time = cur_speed / getMaxAcceleration();
 			float decel_distance = getMaxAcceleration()/2 * decel_time * decel_time;
-			if(cur_speed > 0.0f && decel_distance > goal_distance) {
+			if(cur_speed > 0.0f && decel_distance > goal_distance) 
+			{
 				setTargetSpeed(0.0f);
 				cruiseUntil = getAccelerateUntil();
 				frustration = (frustration + 1.0f) / 2;
@@ -668,8 +666,7 @@ public class BucketbotDriver extends BucketbotBase {
 			decel_distance = acceleration/2 * accel_time * accel_time;
 			
 			//if enough room to fully accelerate, do so
-			if(accel_distance + decel_distance <= goal_distance)
-				cruiseUntil = getAccelerateUntil();
+			if(accel_distance + decel_distance <= goal_distance) cruiseUntil = getAccelerateUntil();
 			else { //don't have time to fully accelerate
 				//having this code spread out with sub-steps dramatically helps the java compiler have
 				// better performance
@@ -677,19 +674,21 @@ public class BucketbotDriver extends BucketbotBase {
 				double sin_dir = Math.sin(getDirection());
 				double x_accel = acceleration * cos_dir;
 				double y_accel = acceleration * sin_dir;
-				if(Math.abs(x_accel) > Math.abs(y_accel)) {
+				if(Math.abs(x_accel) > Math.abs(y_accel)) 
+				{
 					double x_goal = (goal_distance - tolerance)* cos_dir;
-					cruiseUntil = curTime + 
-							sqrt2 * (Math.sqrt(2*x_accel*x_goal + getXVelocity()*getXVelocity())
-										- sqrt2*getXVelocity())
-								/ (2*x_accel);
+					cruiseUntil = curTime 
+					              + sqrt2 * (Math.sqrt(2*x_accel*x_goal + getXVelocity()*getXVelocity())
+								  - sqrt2*getXVelocity())
+								  / (2*x_accel);
 				}
-				else {
+				else 
+				{
 					double y_goal = (goal_distance - tolerance) * sin_dir;
-					cruiseUntil = curTime +
-							sqrt2 * (Math.sqrt(2*y_accel*y_goal + getYVelocity()*getYVelocity())
-										- sqrt2*getYVelocity())
-								/ (2*y_accel);
+					cruiseUntil = curTime 
+					              + sqrt2 * (Math.sqrt(2*y_accel*y_goal + getYVelocity()*getYVelocity()) 
+					              - sqrt2*getYVelocity()) 
+					              / (2*y_accel);
 				}				
 			}
 		} //act()

@@ -19,7 +19,7 @@ public class SimulationWorld
 	public LetterStation letterStations[] = null;
 	public WordStation wordStations[] = null;
 	public Bucket buckets[] = null;
-	public WordList wordList = null;
+	public WordList wordList = null;		// LIST OF ALL WORDS TO BE PROCESSED IS HERE
 	protected List<LetterColor> letterColors;	/* letterColors is the list of probabilities of each color. the colorID is the color's index into this list */
 	protected List<Updateable> updateables;
 	public Map map = null;
@@ -123,6 +123,7 @@ public class SimulationWorld
 				//if it's a built-in type, we actually want the TYPE field, rather than the class itself
 				// e.g. we would like "float" instead of "java.lang.Float"
 				for(Field f : classes[i].getFields())
+				{
 					if(f.getName().equals("TYPE")) 
 					{
 						try {
@@ -130,9 +131,10 @@ public class SimulationWorld
 						} catch (Throwable e) { System.out.println("could not load class " + class_name + ". " + e); System.exit(1); }
 						break;
 					}
+				}
 			}
 			Constructor constr_def = Class.forName(class_name).getConstructor(classes);
-			return constr_def .newInstance(params);
+			return constr_def.newInstance(params);
 		} catch(Throwable e) { System.out.println("could not load class " + class_name + ". " + e + ": " + e.getCause()); System.exit(1); }
 		return null;
 	}
@@ -153,8 +155,7 @@ public class SimulationWorld
 			double next_time = update_finish_time;
 
 			//find the time of the earliest next event
-			for(Updateable u : updateables)
-				next_time = Math.min(u.getNextEventTime(currentTime), next_time);
+			for(Updateable u : updateables) next_time = Math.min(u.getNextEventTime(currentTime), next_time);
 			
 			//see if a potential collision will happen before the next event
 			double min_time_delta = Math.min( map.getShortestTimeWithoutCollision(), next_time - currentTime);
@@ -164,8 +165,7 @@ public class SimulationWorld
 			next_time = Math.min(update_finish_time, currentTime + min_time_delta);
 
 			//run up til the next event
-			for(Updateable u : updateables)
-				u.update(currentTime, next_time);
+			for(Updateable u : updateables) u.update(currentTime, next_time);
 			
 			currentTime = next_time;
 		}

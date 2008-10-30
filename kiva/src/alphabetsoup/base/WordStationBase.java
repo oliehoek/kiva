@@ -16,7 +16,7 @@ public class WordStationBase extends Circle implements WordStation, Updateable {
 	private int capacity;
 	private float bucketToLetterTime;
 	private float wordCompletionTime;
-	public List<Word> assignedWords;
+	public List<Word> assignedWords;			// WORD THAT IS NEEDED TO BE PROCESSED
 	
 	protected double blockedUntilTime;
 	
@@ -142,8 +142,10 @@ public class WordStationBase extends Circle implements WordStation, Updateable {
 	 * @param cur_time
 	 * @return
 	 */
-	protected Word removeAnyCompletedWord(double cur_time) {
+	protected Word removeAnyCompletedWord(double cur_time) 
+	{
 		//remove any words that are finished, going backwards to remove from the list
+		// REMOVE WORDS THAT ARE COMPLETE
 		for(int w = assignedWords.size()-1; w >= 0; w--)
 			if(assignedWords.get(w).isCompleted()) {
 				Word completed = assignedWords.get(w);
