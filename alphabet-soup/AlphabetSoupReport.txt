@@ -1,0 +1,19 @@
+total time: 119.790
+current statistics time: 10.667
+total distance: 1146.018
+pickups: 0
+setdowns: 0
+collisions: 12
+% in Evade: 5.904
+% in Move: 79.202
+% in PutLetter: 15.011
+% in TAKE_BUCKET_TO_WORD_STATION: 100.233
+completed words: 0
+word completion rate: 0.000
+completed letters: 0
+letter completion rate: 0.000
+average letters requested per letter station: 0.000
+average letter station idle time: 1.000
+average letter transfer requests per word station: 1.800
+average word station idle time: 0.698
+bucket utilization: 0.757

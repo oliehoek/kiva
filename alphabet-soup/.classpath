@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/home/frans/software/java/lwjgl-2.9.3/jar/jinput.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/frans/software/java/lwjgl-2.9.3/jar/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/frans/software/java/lwjgl-2.9.3/native/linux"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/frans/software/java/lwjgl-2.9.3/jar/lwjgl_test.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/frans/software/java/lwjgl-2.9.3/jar/lwjgl_util.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
